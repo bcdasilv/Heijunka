@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.org.fieb.heijunka.model.Demand;
-import br.org.fieb.heijunka.model.KanbanCard;
+import br.org.fieb.heijunka.model.ItemContainer;
 import br.org.fieb.heijunka.model.TimeSlot;
 import br.org.fieb.heijunka.model.WorkSchedule;
 
@@ -23,24 +23,24 @@ public class DefaultHeijunkaStrategy implements IHeijunkaStrategy{
 			throw new InvalidHeijunkaInputException("Demand or work schedule is empty!");
 		}
 		
-		Set<KanbanCard> kanbanCards = demandMap.getDemand().keySet();
+		Set<ItemContainer> conteiners = demandMap.getDemand().keySet();
 		Set<Integer> shiftNumbers = workScheduleMap.getShifts().keySet();
 		
 //		Collection<Integer> demandValues = demandMap.getDemand().values();
 //		Collection<TimeSlot> timeSlots = workScheduleMap.getShifts().values();
 		
-		int numberOfItems = kanbanCards.size();
+		int numberOfItems = conteiners.size();
 		int  numberOfShifts = shiftNumbers.size();
 		
 		int[][] box = new int[numberOfItems][numberOfShifts];
 
 		//Object[] shiftNumbersArray = shiftNumbers.toArray();
-		Object[] kanbanCardsArray = kanbanCards.toArray();
+		Object[] conteinersArray = conteiners.toArray();
 		
-		for (int i = 0; i < kanbanCardsArray.length; i++) {
+		for (int i = 0; i < conteinersArray.length; i++) {
 			
-			if (kanbanCardsArray[i] != null){
-				KanbanCard kanbanCard = (KanbanCard)kanbanCardsArray[i];
+			if (conteinersArray[i] != null){
+				ItemContainer kanbanCard = (ItemContainer)conteinersArray[i];
 				
 				int pitch = kanbanCard.getPitch();
 				

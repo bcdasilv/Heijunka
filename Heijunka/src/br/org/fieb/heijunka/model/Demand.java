@@ -6,23 +6,23 @@ import java.util.Map;
 // Demand in months
 public class Demand {
 
-	private Map<KanbanCard, Integer> demand;
+	private Map<ItemContainer, Integer> demand;
 	
 	public Demand(){
-		setDemand(new HashMap<KanbanCard, Integer>());
+		setDemand(new HashMap<ItemContainer, Integer>());
 		
 	}
 
-	public Demand(HashMap<KanbanCard, Integer> demand){
+	public Demand(HashMap<ItemContainer, Integer> demand){
 		setDemand(demand);
 		
 	}
 	
-	public Map<KanbanCard, Integer> getDemand() {
+	public Map<ItemContainer, Integer> getDemand() {
 		return demand;
 	}
 
-	public void setDemand(Map<KanbanCard, Integer> demand) {
+	public void setDemand(Map<ItemContainer, Integer> demand) {
 		this.demand = demand;
 	}
 }
