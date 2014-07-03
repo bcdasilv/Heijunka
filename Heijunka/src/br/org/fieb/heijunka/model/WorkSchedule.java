@@ -3,10 +3,12 @@ package br.org.fieb.heijunka.model;
 import java.util.List;
 import java.util.Vector;
 
-//Considering in one day
+//Considering time slots in one single day
+//Then, we replicate time slots for the number of production days
 public class WorkSchedule {
 	
 	private List<TimeSlot> workTimeSlots;
+	private int productionDays;
 	
 	public WorkSchedule(){
 		setWorkTimeSlots(new Vector<TimeSlot>());
@@ -37,6 +39,20 @@ public class WorkSchedule {
 		return false;
 	}
 
-	
+	public int productionMinutesDay(){
+		int minutes = 0;
+		for (TimeSlot ts : workTimeSlots) {
+			minutes += ts.getTimeIntervalInMinutes();
+		}
+		return minutes;
+	}
+
+	public int getProductionDays() {
+		return productionDays;
+	}
+
+	public void setProductionDays(int productionDays) {
+		this.productionDays = productionDays;
+	}
 
 }
