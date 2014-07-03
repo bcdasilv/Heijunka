@@ -1,29 +1,40 @@
 package br.org.fieb.heijunka.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Vector;
 
 //Considering in one day
 public class WorkSchedule {
 	
-	private Map<Integer, TimeSlot> shifts;
+	private List<TimeSlot> workTimeSlots;
 	
 	public WorkSchedule(){
-		setShifts(new HashMap<Integer, TimeSlot>());
+		setWorkTimeSlots(new Vector<TimeSlot>());
 		
 	}
 	
-	public WorkSchedule(HashMap<Integer, TimeSlot> shifts){
-		setShifts(shifts);
+	public WorkSchedule(List<TimeSlot> workTimeSlots){
+		setWorkTimeSlots(workTimeSlots);
 		
 	}	
 	
-	public Map<Integer, TimeSlot> getShifts() {
-		return shifts;
+	public List<TimeSlot> getWorkTimeSlots() {
+		return workTimeSlots;
 	}
 
-	public void setShifts(Map<Integer, TimeSlot> shifts) {
-		this.shifts = shifts;
+	public void setWorkTimeSlots(List<TimeSlot> workTimeSlots) {
+		this.workTimeSlots = workTimeSlots;
+	}
+	
+	//Maybe improve here throwing exceptions
+	public boolean addWorkTimeSlot(TimeSlot newTimeSlot){
+		
+		TimeSlot lastTimeSlot = workTimeSlots.get(workTimeSlots.size()-1);
+		
+		if (lastTimeSlot.getEndTime() <= newTimeSlot.getStartTime())
+			return workTimeSlots.add(newTimeSlot);
+		
+		return false;
 	}
 
 	

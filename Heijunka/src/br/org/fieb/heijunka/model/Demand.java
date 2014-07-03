@@ -1,19 +1,20 @@
 package br.org.fieb.heijunka.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-// Demand in months
+
+// Monthly demand
 public class Demand {
 
 	private Map<ItemContainer, Integer> demand;
 	
 	public Demand(){
-		setDemand(new HashMap<ItemContainer, Integer>());
+		setDemand(new LinkedHashMap<ItemContainer, Integer>());
 		
 	}
 
-	public Demand(HashMap<ItemContainer, Integer> demand){
+	public Demand(Map<ItemContainer, Integer> demand){
 		setDemand(demand);
 		
 	}

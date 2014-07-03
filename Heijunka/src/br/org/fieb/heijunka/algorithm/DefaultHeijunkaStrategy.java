@@ -1,6 +1,5 @@
 package br.org.fieb.heijunka.algorithm;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -14,25 +13,21 @@ import br.org.fieb.heijunka.model.WorkSchedule;
 public class DefaultHeijunkaStrategy implements IHeijunkaStrategy{
 
 	@Override
-	public int[][] leveling(Demand demandMap, WorkSchedule workScheduleMap) throws InvalidHeijunkaInputException {
+	public int[][] leveling(Demand demandMap, WorkSchedule workSchedule) throws InvalidHeijunkaInputException {
 				
-		if (demandMap != null && workScheduleMap !=null)
+		if (demandMap == null && workSchedule ==null)
 			throw new InvalidHeijunkaInputException("Demand or work schedule is null!");
 		
-		else if (demandMap.getDemand().isEmpty() || workScheduleMap.getShifts().isEmpty()){
+		else if (demandMap.getDemand().isEmpty() || workSchedule.getWorkTimeSlots().isEmpty()){
 			throw new InvalidHeijunkaInputException("Demand or work schedule is empty!");
 		}
 		
 		Set<ItemContainer> conteiners = demandMap.getDemand().keySet();
-		Set<Integer> shiftNumbers = workScheduleMap.getShifts().keySet();
-		
-//		Collection<Integer> demandValues = demandMap.getDemand().values();
-//		Collection<TimeSlot> timeSlots = workScheduleMap.getShifts().values();
 		
 		int numberOfItems = conteiners.size();
-		int  numberOfShifts = shiftNumbers.size();
+		int  numberOfSlots = workSchedule.getWorkTimeSlots().size();
 		
-		int[][] box = new int[numberOfItems][numberOfShifts];
+		int[][] box = new int[numberOfItems][numberOfSlots];
 
 		//Object[] shiftNumbersArray = shiftNumbers.toArray();
 		Object[] conteinersArray = conteiners.toArray();
@@ -40,49 +35,50 @@ public class DefaultHeijunkaStrategy implements IHeijunkaStrategy{
 		for (int i = 0; i < conteinersArray.length; i++) {
 			
 			if (conteinersArray[i] != null){
-				ItemContainer kanbanCard = (ItemContainer)conteinersArray[i];
+				ItemContainer conteiner = (ItemContainer)conteinersArray[i];
 				
-				int pitch = kanbanCard.getPitch();
+				int pitch = conteiner.getPitch();
 				
-				box[i] = fitConteinerInTimeSlots(pitch, workScheduleMap);
+				box[i] = fitConteinerInTimeSlots(pitch, workSchedule);
 			}
 			
 		}	
 			
-		return null;
+		return box;
 	}
 	
-	private int[] fitConteinerInTimeSlots(int pitch, WorkSchedule workScheduleMap){
+	private int[] fitConteinerInTimeSlots(int pitch, WorkSchedule workSchedule){
 		
-		Set<Integer> shiftNumbers = workScheduleMap.getShifts().keySet();
-		Object[] shiftNumbersArray = shiftNumbers.toArray();
+		List<TimeSlot> workTimeSlots = workSchedule.getWorkTimeSlots();
 		
-		int[] boxRow = new int[shiftNumbers.size()];
+		Object[] workTimeSlotsArray = workTimeSlots.toArray();
 		
-		int sumTimeIntervals = 0; //In minutes. Will be used when the container doesn't fit in a single timeSlot.
+		int[] boxRow = new int[workTimeSlots.size()];
 		
-		for (int j = 0; j < shiftNumbersArray.length; ) {
+		int sumTimeIntervals = 0; //In minutes. It'll be used when the container doesn't fit in a single timeSlot.
+		
+		for (int j = 0; j < workTimeSlotsArray.length; ) {
 			
-			if (shiftNumbersArray[j] != null){
-				
-				Integer shiftNumber = (Integer) shiftNumbersArray[j];
-				
-				TimeSlot timeSlot = workScheduleMap.getShifts().get(shiftNumber);
-				
+			TimeSlot timeSlot = (TimeSlot)workTimeSlotsArray[j];
+			
+			if (timeSlot!= null){
+			
 				int timeInterval = timeSlot.getTimeIntervalInMinutes();
 				int fitness = timeInterval / pitch;
 				
 				sumTimeIntervals += timeInterval;
-				
+
 				if ( fitness >= 1){
 					boxRow[j] = fitness;
+					sumTimeIntervals = 0;
 					j++;
 				}
 				else {
-					int shiftNumberFitted = fitContainerInMultipleTimeSlots(pitch, workScheduleMap.getShifts().values(), shiftNumber+1, sumTimeIntervals);
-					if(shiftNumberFitted != -1){
-						boxRow[shiftNumberFitted] = 1;
-						j = shiftNumberFitted;
+					int timeSlotFitted = fitContainerInMultipleTimeSlots(pitch, workTimeSlots, j+1, sumTimeIntervals);
+					if(timeSlotFitted != -1){
+						boxRow[timeSlotFitted] = 1;
+						j = timeSlotFitted + 1;
+						sumTimeIntervals = 0;
 					}
 					else
 						break;
@@ -93,25 +89,20 @@ public class DefaultHeijunkaStrategy implements IHeijunkaStrategy{
 		return boxRow;
 	}
 	
-	private int fitContainerInMultipleTimeSlots(int pitch, Collection<TimeSlot> timeSlots, int shiftNumber, int sumTimeIntervals){
+	private int fitContainerInMultipleTimeSlots(int pitch, List<TimeSlot> timeSlots, int slotIndex, int sumTimeIntervals){
 				
-		if (shiftNumber >= timeSlots.size())
+		if (slotIndex >= timeSlots.size())
 			return -1;
 
-		List<TimeSlot> timeSlotsList = (List<TimeSlot>)timeSlots;
-
-		TimeSlot timeSlot = timeSlotsList.get(shiftNumber);
+		TimeSlot timeSlot = timeSlots.get(slotIndex);
 		if (timeSlot != null)
 			sumTimeIntervals += timeSlot.getTimeIntervalInMinutes();
 
 		
 		if ( (sumTimeIntervals / pitch) >= 1)
-			return shiftNumber;
+			return slotIndex;
 		
-		return fitContainerInMultipleTimeSlots(pitch, timeSlots, shiftNumber+1, sumTimeIntervals);
+		return fitContainerInMultipleTimeSlots(pitch, timeSlots, slotIndex+1, sumTimeIntervals);
 	}
-	
-//	int monthlyDemand = demandMap.getDemand().get(kanbanCard);
-//	int monthlyKanbanCardDemand = monthlyDemand / kanbanCard.getNumberOfItems();
 
 }

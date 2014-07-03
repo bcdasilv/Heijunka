@@ -1,6 +1,5 @@
 package br.org.fieb.heijunka.model;
 
-//Rename to 'ItemBox', 'ItemContainer'???
 public class ItemContainer {
 
 	private String id;
