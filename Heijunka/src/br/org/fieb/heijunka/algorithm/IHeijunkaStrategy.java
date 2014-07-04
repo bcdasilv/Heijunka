@@ -5,6 +5,6 @@ import br.org.fieb.heijunka.model.WorkSchedule;
 
 public interface IHeijunkaStrategy {
 	
-	public int[][] leveling(Demand demandMap, WorkSchedule workScheduleMap) throws InvalidHeijunkaInputException;
+	public Integer[][] leveling(Demand demandMap, WorkSchedule workScheduleMap) throws InvalidHeijunkaInputException;
 
 }

@@ -3,7 +3,8 @@ package br.org.fieb.heijunka;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
-import br.org.fieb.heijunka.algorithm.DefaultHeijunkaStrategy;
+import br.org.fieb.heijunka.algorithm.DefaultHJVariableSlots;
+import br.org.fieb.heijunka.algorithm.DefaultHJVariableSlotsWithMonthlyDemand;
 import br.org.fieb.heijunka.algorithm.IHeijunkaStrategy;
 import br.org.fieb.heijunka.algorithm.InvalidHeijunkaInputException;
 import br.org.fieb.heijunka.model.Demand;
@@ -19,13 +20,13 @@ public class HeijunkaBox{
 	private IHeijunkaStrategy heijunkaAlgorithm;
 	
 	public HeijunkaBox(){
-		heijunkaAlgorithm = new DefaultHeijunkaStrategy();
+		heijunkaAlgorithm = new DefaultHJVariableSlots();
 	}
 	
 	public HeijunkaBox(Demand demand, WorkSchedule workSchedule){
 		setDemand(demand);
 		setWorkSchedule(workSchedule);
-		heijunkaAlgorithm = new DefaultHeijunkaStrategy();
+		heijunkaAlgorithm = new DefaultHJVariableSlots();
 	}
 	
 	
@@ -52,7 +53,7 @@ public class HeijunkaBox{
 	public String toString(){
 		String output = "";
 		try {
-			int[][] box = heijunkaAlgorithm.leveling(demandMap, workSchedule);
+			Integer[][] box = heijunkaAlgorithm.leveling(demandMap, workSchedule);
 			for (int i = 0; i < box.length; i++) {
 				for (int j = 0; j < box[i].length; j++) {
 					output += box[i][j] + "  ";
@@ -65,6 +66,15 @@ public class HeijunkaBox{
 		return output;
 	}
 	
+	public Integer[][] getBoxIntegerArray(){
+		try {
+			return heijunkaAlgorithm.leveling(demandMap, workSchedule);
+		} catch (InvalidHeijunkaInputException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static void main(String args[]){
 		
 		Demand demand = new Demand();
@@ -73,6 +83,8 @@ public class HeijunkaBox{
 		ItemContainer itemContainer2 = new ItemContainer();
 		ItemContainer itemContainer3 = new ItemContainer();
 		ItemContainer itemContainer4 = new ItemContainer();
+		ItemContainer itemContainer5 = new ItemContainer();
+		ItemContainer itemContainer6 = new ItemContainer();
 		
 		itemContainer1.setId("123");
 		itemContainer1.setName("Liquidificador Black Diamond 110V");
@@ -89,16 +101,28 @@ public class HeijunkaBox{
 		itemContainer3.setNumberOfItems(1); 
 		itemContainer3.setPitch(70); //assuming 70 minutes per item
 		
-		itemContainer4.setId("xyz");
+		itemContainer4.setId("abc");
 		itemContainer4.setName("Lavadora/Secadora Inox 11kg 110v");
 		itemContainer4.setNumberOfItems(1); 
 		itemContainer4.setPitch(130); //assuming 130 minutes per item
 		
+		itemContainer5.setId("xyz");
+		itemContainer5.setName("Torradeira preta 220v");
+		itemContainer5.setNumberOfItems(10); 
+		itemContainer5.setPitch(60); //assuming 6 minutes per item
+		
+		itemContainer6.setId("xpto");
+		itemContainer6.setName("Disco voador");
+		itemContainer6.setNumberOfItems(1); 
+		itemContainer6.setPitch(100000); //testing a product that cannot be produced in a day
+		
 		LinkedHashMap<ItemContainer, Integer> demandMap = new LinkedHashMap<ItemContainer, Integer>();
-		demandMap.put(itemContainer1, 50000);
-		demandMap.put(itemContainer2, 15000);
-		demandMap.put(itemContainer3, 500);
-		demandMap.put(itemContainer4, 200);
+		demandMap.put(itemContainer1, 450*itemContainer1.getNumberOfItems());
+		demandMap.put(itemContainer2, 150*itemContainer2.getNumberOfItems());
+		demandMap.put(itemContainer3, 100*itemContainer3.getNumberOfItems());
+		demandMap.put(itemContainer4, 100*itemContainer4.getNumberOfItems());
+		demandMap.put(itemContainer5, 100*itemContainer5.getNumberOfItems());
+		demandMap.put(itemContainer6, 100*itemContainer6.getNumberOfItems());
 		
 		demand.setDemand(demandMap);
 		
@@ -129,8 +153,10 @@ public class HeijunkaBox{
 		timeSlots.add(timeSlot8);	
 		
 		WorkSchedule workSchedule = new WorkSchedule(timeSlots);
+		workSchedule.setProductionDays(30);
 		
 		HeijunkaBox hBox = new HeijunkaBox(demand, workSchedule);
+		hBox.setHeijunkaAlgorithm(new DefaultHJVariableSlotsWithMonthlyDemand());
 		
 		System.out.println(hBox.toString());
 		
