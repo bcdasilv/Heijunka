@@ -8,7 +8,7 @@ import java.util.Vector;
 public class WorkSchedule {
 	
 	private List<TimeSlot> workTimeSlots;
-	private int productionDays;
+	private int productiveDays;
 	
 	public WorkSchedule(){
 		setWorkTimeSlots(new Vector<TimeSlot>());
@@ -48,11 +48,11 @@ public class WorkSchedule {
 	}
 
 	public int getProductionDays() {
-		return productionDays;
+		return productiveDays;
 	}
 
 	public void setProductionDays(int productionDays) {
-		this.productionDays = productionDays;
+		this.productiveDays = productionDays;
 	}
 
 }

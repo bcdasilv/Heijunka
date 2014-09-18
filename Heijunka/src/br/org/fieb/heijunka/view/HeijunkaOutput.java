@@ -2,23 +2,15 @@ package br.org.fieb.heijunka.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import br.org.fieb.heijunka.HeijunkaBox;
 import br.org.fieb.heijunka.algorithm.DefaultHJVariableSlotsWithMonthlyDemand;
-import br.org.fieb.heijunka.algorithm.IHeijunkaStrategy;
-import br.org.fieb.heijunka.algorithm.InvalidHeijunkaInputException;
-import br.org.fieb.heijunka.model.Demand;
 import br.org.fieb.heijunka.model.TimeSlot;
 import br.org.fieb.heijunka.model.WorkSchedule;
 

@@ -1,9 +1,9 @@
 package br.org.fieb.heijunka.model;
 
 //It doesnt have validation. For instance, endTime before StartTime
-//Better to use schedule/calendar
+//check if it is better to use schedule/calendar
 public class TimeSlot{
-	//considering only hour, not minutes and seconds.
+	//considering only hour, not minutes and seconds. TODO: consider minutes
 	private int startTime; //e.g.: 10 instead of 10:45:00
 	private int endTime;  //       12 instead of 12:15:00
 	

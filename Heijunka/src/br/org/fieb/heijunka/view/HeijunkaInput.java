@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
-import br.org.fieb.heijunka.HeijunkaBox;
 import br.org.fieb.heijunka.model.Demand;
 import br.org.fieb.heijunka.model.ItemContainer;
 import br.org.fieb.heijunka.model.TimeSlot;
@@ -18,7 +17,6 @@ public class HeijunkaInput {
 	private WorkSchedule workSchedule;
 	
 	public HeijunkaInput() throws FileNotFoundException {
-
 
 		Scanner inFile= new Scanner(new FileReader("C:/heijunka/itencontainer.txt")).useDelimiter(",");
 		Scanner inFile2= new Scanner(new FileReader("C:/heijunka/timeslot.txt")).useDelimiter(",");
