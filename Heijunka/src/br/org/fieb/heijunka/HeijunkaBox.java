@@ -1,19 +1,16 @@
 package br.org.fieb.heijunka;
 
 import java.io.FileNotFoundException;
-import java.util.LinkedHashMap;
-import java.util.Vector;
+import java.io.IOException;
 
+import jxl.read.biff.BiffException;
 import br.org.fieb.heijunka.algorithm.DefaultHJVariableSlots;
-import br.org.fieb.heijunka.algorithm.DefaultHJVariableSlotsWithMonthlyDemand;
 import br.org.fieb.heijunka.algorithm.IHeijunkaStrategy;
 import br.org.fieb.heijunka.algorithm.InvalidHeijunkaInputException;
 import br.org.fieb.heijunka.model.Demand;
-import br.org.fieb.heijunka.model.ItemContainer;
-import br.org.fieb.heijunka.model.TimeSlot;
 import br.org.fieb.heijunka.model.WorkSchedule;
+import br.org.fieb.heijunka.view.HeijunkaForm;
 import br.org.fieb.heijunka.view.HeijunkaInput;
-import br.org.fieb.heijunka.view.HeijunkaOutput;
 
 
 public class HeijunkaBox{
@@ -165,12 +162,16 @@ public class HeijunkaBox{
 //		
 //	}
 	
-	public static void main(String args[]) throws FileNotFoundException{
+	public static void main(String args[]) throws BiffException, IOException{
 		
-		HeijunkaInput hInput = new HeijunkaInput();
+		HeijunkaInput hInput = new HeijunkaInput();		
+		/*HeijunkaInput hInput = new HeijunkaInput();
 		HeijunkaBox hBox = new HeijunkaBox(hInput.getDemand(), hInput.getWorkSchedule());
 		HeijunkaOutput hOut = new HeijunkaOutput("Heijunka Demo");
-		hOut.criaJanela(hBox);
+		hOut.criaJanela(hBox);*/
+		HeijunkaForm hFrame = new HeijunkaForm("Programação Heijunka");
+		//hFrame.criaJanelaFuncionamentoFabrica();
+		hFrame.criaJanelaitem();
 	}
 	
 }
